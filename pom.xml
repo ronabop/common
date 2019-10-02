@@ -850,6 +850,7 @@
                                     <goal>single</goal>
                                 </goals>
                                 <configuration>
+                                    <tarLongFileMode>posix</tarLongFileMode>
                                     <skipAssembly>${docker.skip-build}</skipAssembly>
                                     <descriptors>
                                         <descriptor>target/dependency/assembly-plugin-boilerplate-${confluent.version}/common-docker-package.xml</descriptor>
