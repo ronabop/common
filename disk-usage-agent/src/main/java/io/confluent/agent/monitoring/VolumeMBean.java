@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Confluent Inc.
+ * Copyright 2021 Confluent Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package io.confluent.common.utils;
+package io.confluent.agent.monitoring;
 
-/*
- *  Marker interface for use with Junit Categories to separate Integration Tests
- *  from Unit Tests
- */
-public interface IntegrationTest {}
+public interface VolumeMBean {
+
+  long getTotal();
+
+  long getUsed();
+
+  long getAvailable();
+
+  double getPercentUsed();
+
+  double getPercentAvailable();
+
+  String getMountpoint();
+
+  String getDeviceName();
+}

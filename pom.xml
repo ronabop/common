@@ -15,6 +15,7 @@
   ~ limitations under the License.
   ~-->
 
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -23,7 +24,7 @@
     <groupId>io.confluent</groupId>
     <artifactId>common-parent</artifactId>
     <packaging>pom</packaging>
-    <version>5.4.0-SNAPSHOT</version>
+    <version>7.1.0-0</version>
     <name>common</name>
     <organization>
         <name>Confluent, Inc.</name>
@@ -45,64 +46,67 @@
     <properties>
         <!--jacoco prepare-agent needs argLine defined to set this variable. if we don't have a default set then maven gets angry.-->
         <argLine></argLine>
-        <!-- AVRO-2122 is a regression in 1.8.2 so we can't upgrade until 1.8.3 is released -->
-        <avro.version>1.8.1</avro.version>
+        <avro.version>1.10.1</avro.version>
+        <protobuf.version>3.17.3</protobuf.version>
         <required.maven.version>3.2</required.maven.version>
-        <confluent.version>5.4.0-SNAPSHOT</confluent.version>
-        <kafka.version>5.4.0-ccs-SNAPSHOT</kafka.version>
-        <ce.kafka.version>5.4.0-ce-SNAPSHOT</ce.kafka.version>
-        <easymock.version>4.0.1</easymock.version>
+        <kafka.version>[7.1.0-0-ccs, 7.1.1-0-ccs)</kafka.version>
+        <ce.kafka.version>[7.1.0-0-ce, 7.1.1-0-ce)</ce.kafka.version>
+        <easymock.version>4.3</easymock.version>
+        <!-- keep exec-maven-plugin on 1.5.0 until https://github.com/mojohaus/exec-maven-plugin/issues/76 is fixed
+             running our LicenseFinder plugin in create-licenses-for-docker breaks when upgrading to 1.6.0 -->
         <exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
-        <spotbugs.version>3.1.8</spotbugs.version>
-        <spotbugs.maven.plugin.version>3.1.8</spotbugs.maven.plugin.version>
+        <spotbugs.version>4.3.0</spotbugs.version>
+        <spotbugs.maven.plugin.version>4.3.0</spotbugs.maven.plugin.version>
         <java.version>8</java.version>
-        <!--
-         jackson artifacts have both an overall version, and potentially individual versions for artifacts that
-         rev hotfix versions independent of the overall version
-         -->
-        <jackson.version>2.9.9</jackson.version>
-        <!-- The following property should default to jackson.version unless there's an independent hotfix version.
-        If so, then once the next version of jackson is released, it should get reset to the default -->
-        <!-- <jackson-databind.version>${jackson.version}</jackson-databind.version> -->
-        <jackson-databind.version>2.9.9.3</jackson-databind.version>
+        <jackson.version>2.12.3</jackson.version>
+        <jackson.bom.version>2.12.3</jackson.bom.version>
+        <jackson.cbor.version>2.12.3</jackson.cbor.version>
 
-        <gson.version>2.8.5</gson.version>
-        <guava.version>24.0-jre</guava.version>
-        <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
-        <junit.version>4.12</junit.version>
-        <kafka.scala.version>2.12</kafka.scala.version>
-        <licenses.version>${confluent.version}</licenses.version>
-        <maven-assembly.version>3.0.0</maven-assembly.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
+        <gson.version>2.8.6</gson.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <junit.version>4.13.1</junit.version>
+        <junit.jupiter.version>5.7.0</junit.jupiter.version>
+        <kafka.scala.version>2.13</kafka.scala.version>
+        <scala.version>2.13.5</scala.version>
+        <maven-assembly.version>3.3.0</maven-assembly.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <maven-deploy.version>2.8.2</maven-deploy.version>
-        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
-        <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
-        <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
+        <maven-project-info-reports-plugin.version>3.1.1</maven-project-info-reports-plugin.version>
+        <mbknor-jackson-jsonschema.version>1.0.39</mbknor-jackson-jsonschema.version>
         <buildnumber-plugin.version>1.4</buildnumber-plugin.version>
-        <mockito.version>2.23.0</mockito.version>
+        <mockito.version>3.11.2</mockito.version>
         <mockito-all.version>1.10.19</mockito-all.version>
-        <os-maven-plugin.version>1.5.0.Final</os-maven-plugin.version>
+        <os-maven-plugin.version>1.6.2</os-maven-plugin.version>
         <slf4j-api.version>${slf4j.version}</slf4j-api.version>
         <jaxb.version>2.3.0</jaxb.version>
         <hamcrest.version>1.3</hamcrest.version>
         <!-- Update to 2.0.0 for unit test patch usage -->
         <powermock.version>2.0.0</powermock.version>
-        <slf4j.version>1.7.26</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <confluent-log4j.version>1.2.17-cp3</confluent-log4j.version>
         <zkclient.version>0.11</zkclient.version>
-        <zookeeper.version>3.5.5</zookeeper.version>
-        <bouncycastle.version>1.60</bouncycastle.version>
-        <checkstyle.version>8.18</checkstyle.version>
-        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <zookeeper.version>3.6.3</zookeeper.version>
+        <netty.version>4.1.65.Final</netty.version>
+        <bouncycastle.version>1.68</bouncycastle.version>
+        <jmx_prometheus_javaagent.version>0.14.0</jmx_prometheus_javaagent.version>
+        <jolokia-jvm.version>1.6.2</jolokia-jvm.version>
+        <checkstyle.version>8.44</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <checkstyle.config.location>checkstyle/checkstyle.xml</checkstyle.config.location>
         <checkstyle.suppressions.location>checkstyle/common-suppressions.xml</checkstyle.suppressions.location>
-        <dependency.check.version>3.3.4</dependency.check.version>
+        <dependency.check.version>6.1.6</dependency.check.version>
         <dependency.check.suppressions.location>dependency-check/suppressions.xml</dependency.check.suppressions.location>
+        <dependency.check.skip>false</dependency.check.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -117,7 +121,42 @@
         <docker.upstream-tag>${docker.tag}</docker.upstream-tag>  <!-- Tag for base images -->
         <docker.test-registry>${docker.upstream-registry}</docker.test-registry>  <!-- Registry for integration test dependencies -->
         <docker.test-tag>${docker.upstream-tag}</docker.test-tag>  <!-- Tag for integration test dependencies -->
-        <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <!-- The name of the docker file to run. -->
+        <docker.file>Dockerfile</docker.file>
+        <!-- Pull the latest base image or use a local image. -->
+        <docker.pull-image>false</docker.pull-image>
+        <dependency.check.skip>true</dependency.check.skip>
+        <io.confluent.common.version>7.1.0-0</io.confluent.common.version>
+        <!-- This is a version of the pom file that we install and deploy because
+            the kafka and ce-kafka version ranges are resolved.
+        -->
+        <installed.pom.file>installed_pom.xml</installed.pom.file>
+        <coderplus.plugin.version>1.0</coderplus.plugin.version>
+        <!-- This version range is only used in the custom resolver plugin for 
+            resolving the version of ccs and ce kafka. This property should 
+            never be used any where else.
+        -->
+        <confluent.version.range>[7.1.0-0, 7.1.1-0)</confluent.version.range>
+        <!-- Controls whether we run the maven resolver plugin which is used to resolve
+            the version ranges for kafka and ce-kafka. We want to run this for local builds,
+            but disable this in the jenkins profile so it doesn't run during CI builds.
+        -->
+        <skip.maven.resolver.plugin>false</skip.maven.resolver.plugin>
+        <!-- The custom install step handles installing a modified pom file with the
+            kafka version ranges resolved. We only do this for local builds so for 
+            CI builds we set the phase to none.
+        -->
+        <custom.install.phase>install</custom.install.phase>
+        <!-- The custom deploy step handles copying the modified pom over the 
+            standard pom so that we deploy a pom with the kafka versions resolved.
+            We only do this for local builds so for 
+            CI builds we set the phase to none.
+        -->
+        <custom.deploy.phase>deploy</custom.deploy.phase>
+        <maven.resolver.plugin.version>0.6.0</maven.resolver.plugin.version>
+        <fail.if.ce-kafka.version.not.found>false</fail.if.ce-kafka.version.not.found>
+        <io.confluent.license-file-generator.version>${confluent.version.range}</io.confluent.license-file-generator.version>
     </properties>
 
     <scm>
@@ -138,19 +177,20 @@
         <module>log4j2-extensions</module>
         <module>package</module>
         <module>parent</module>
+        <module>disk-usage-agent</module>
     </modules>
 
     <repositories>
         <repository>
             <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
+            <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
+            <url>https://packages.confluent.io/maven/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -174,6 +214,14 @@
                     <exclusion>
                         <groupId>log4j</groupId>
                         <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-handler</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-transport-native-epoll</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -217,13 +265,31 @@
                 <version>${gson.version}</version>
             </dependency>
 
-            <!-- Jackson artifacts with individual versioning as necessary -->
+            <!-- Jackson artifacts with individual versioning -->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson-databind.version}</version>
+              <groupId>com.fasterxml.jackson</groupId>
+              <artifactId>jackson-bom</artifactId>
+              <version>${jackson.bom.version}</version>
+              <scope>import</scope>
+              <type>pom</type>
             </dependency>
-
+            <!-- We fix the scala version to prevent downstream projects from bringing in
+            different minor versions of Scala via different dependencies -->
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-reflect</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-cbor</artifactId>
+                <version>${jackson.cbor.version}</version>
+            </dependency>
             <!-- Kafka Deps -->
             <dependency>
                 <groupId>org.apache.kafka</groupId>
@@ -276,23 +342,46 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
+                <exclusions>
+                    <!-- Use a repackaged version of log4j with security patches instead-->
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <!-- Security patches to the end-of-life log4j 1.2.17 -->
+                <groupId>io.confluent</groupId>
+                <artifactId>confluent-log4j</artifactId>
+                <version>${confluent-log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <version>${netty.version}</version>
             </dependency>
 
             <!--this is our own artifacts, but lets others inherit-->
             <dependency>
                 <groupId>io.confluent</groupId>
                 <artifactId>common-config</artifactId>
-                <version>${confluent.version}</version>
+                <version>${io.confluent.common.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.confluent</groupId>
                 <artifactId>common-metrics</artifactId>
-                <version>${confluent.version}</version>
+                <version>${io.confluent.common.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.confluent</groupId>
                 <artifactId>common-utils</artifactId>
-                <version>${confluent.version}</version>
+                <version>${io.confluent.common.version}</version>
             </dependency>
 
             <!--test deps-->
@@ -300,6 +389,24 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -384,7 +491,7 @@
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>assembly-plugin-boilerplate</artifactId>
-            <version>${confluent.version}</version>
+            <version>${io.confluent.common.version}</version>
             <classifier>resources</classifier>
             <type>zip</type>
             <scope>provided</scope>
@@ -409,7 +516,9 @@
                     <configuration>
                         <configLocation>${checkstyle.config.location}</configLocation>
                         <suppressionsLocation>${checkstyle.suppressions.location}</suppressionsLocation>
-                        <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                        <sourceDirectories>
+                            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                        </sourceDirectories>
                         <encoding>UTF-8</encoding>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
@@ -421,7 +530,7 @@
                         <dependency>
                             <groupId>io.confluent</groupId>
                             <artifactId>build-tools</artifactId>
-                            <version>${confluent.version}</version>
+                            <version>${io.confluent.common.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
@@ -429,38 +538,6 @@
                             <version>${checkstyle.version}</version>
                         </dependency>
                     </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.owasp</groupId>
-                    <artifactId>dependency-check-maven</artifactId>
-                    <version>${dependency.check.version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>io.confluent</groupId>
-                            <artifactId>build-tools</artifactId>
-                            <version>${confluent.version}</version>
-                        </dependency>
-                    </dependencies>
-                    <configuration>
-                        <suppressionFiles>
-                            <suppressionFile>${dependency.check.suppressions.location}</suppressionFile>
-                        </suppressionFiles>
-                        <format>xml</format>
-                        <cveUrl12Modified>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-modified.xml.gz</cveUrl12Modified>
-                        <cveUrl20Modified>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-2.0-modified.xml.gz</cveUrl20Modified>
-                        <cveUrl12Base>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-%d.xml.gz</cveUrl12Base>
-                        <cveUrl20Base>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-2.0-%d.xml.gz</cveUrl20Base>
-                        <skipSystemScope>true</skipSystemScope>
-                        <skipProvidedScope>true</skipProvidedScope>
-                        <skipTestScope>true</skipTestScope>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -518,6 +595,20 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${maven-enforcer-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -694,9 +785,159 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- This custom resolver plugin is used to resolve the version ranges
+                for kafka and ce-kafka since they don't use the standard version scheme.
+                This will set the properties kafka.version and ce.kafka.version
+            -->
+            <plugin>
+                <groupId>io.confluent</groupId>
+                <artifactId>resolver-maven-plugin</artifactId>
+                <version>${maven.resolver.plugin.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                    <phase>validate</phase>
+                        <goals>
+                            <goal>resolve-kafka-range</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                    <versionRange>${confluent.version.range}</versionRange>
+                    <newPomFile>${installed.pom.file}</newPomFile>
+                    <skip>${skip.maven.resolver.plugin}</skip>
+                    <failIfCCSNotfound>true</failIfCCSNotfound>
+                    <failIfCENotfound>${fail.if.ce-kafka.version.not.found}</failIfCENotfound>
+                </configuration>
+            </plugin>
+            <!-- This custom install plugin is run so that we install the common
+                artifact using a the pom with the kafka and ce-kafka version
+                range properties resolved to a specific version.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${maven-install-plugin.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>custom-install</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>${custom.install.phase}</phase>
+                        <configuration>
+                            <file>${installed.pom.file}</file>
+                            <groupId>io.confluent</groupId>
+                            <artifactId>common-parent</artifactId>
+                            <packaging>pom</packaging>
+                            <version>${project.version}</version>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- This custom deploy plugin is run so that when we deploy the common
+                artifact we use a version of the pom file with the kafka and
+                ce-kafka version range properties resolved to a specific version.
+            -->
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>${coderplus.plugin.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>copy-file</id>
+                        <phase>${custom.deploy.phase}</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <overWrite>true</overWrite>
+                            <sourceFile>${basedir}/${installed.pom.file}</sourceFile>
+                            <destinationFile>${basedir}/pom.xml</destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <profiles>
+        <!-- Enable source jars only if a corresponding safe license file is found - projects
+        need to opt in by having one of the matching license files. Because maven activations
+        don't support multiple files, we need to have a separate profile per license. Finally, to
+        support both single and multi-module projects, we need to check for the files relative to
+        both the project and its parent directory (in multi-module projects we're interested in
+        source jars in the child modules, so need to look one level up). This has some risk
+        (checking one level above the project/repo directory) and requires some redundancy, but
+        seems to work sufficiently well.
+        -->
+        <profile>
+            <id>attach-sources-apache</id>
+            <activation>
+                <file>
+                    <exists>LICENSE-Apache</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>attach-sources-apache-parent</id>
+            <activation>
+                <file>
+                    <exists>../LICENSE-Apache</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>attach-sources-confluent</id>
+            <activation>
+                <file>
+                    <exists>LICENSE-ConfluentCommunity</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>attach-sources-confluent-parent</id>
+            <activation>
+                <file>
+                    <exists>../LICENSE-ConfluentCommunity</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>jenkins</id>
             <activation>
@@ -704,6 +945,20 @@
                     <name>env.BUILD_NUMBER</name>
                 </property>
             </activation>
+            <properties>
+                <dependency.check.skip>false</dependency.check.skip>
+                <!-- During CI builds we do not want to execute the resolver plugin
+                    or the additional install and deploy steps as they are only
+                    needed when building locally.
+                -->
+                <skip.maven.resolver.plugin>true</skip.maven.resolver.plugin>
+                <custom.install.phase>none</custom.install.phase>
+                <custom.deploy.phase>none</custom.deploy.phase>
+                <!-- During CI builds we need to fail if we are unable to resolve
+                    the latest version of ce-kafka artifacts.
+                -->
+                <fail.if.ce-kafka.version.not.found>true</fail.if.ce-kafka.version.not.found>
+            </properties>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -753,10 +1008,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                      <groupId>org.owasp</groupId>
-                      <artifactId>dependency-check-maven</artifactId>
-                    </plugin>
                 </plugins>
             </build>
             <reporting>
@@ -774,7 +1025,9 @@
                         <configuration>
                             <configLocation>${checkstyle.config.location}</configLocation>
                             <suppressionsLocation>${checkstyle.suppressions.location}</suppressionsLocation>
-                            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>false</failsOnError>
@@ -792,6 +1045,54 @@
                     </plugin>
                 </plugins>
             </reporting>
+        </profile>
+        <profile>
+            <!-- org.owasp:dependency-check-maven >= 4.0.0 will not work with JDK7 so it must be activated in a JDK>=1.8 profile.
+                 Developers can always pass -Ddependency.check.skip=true on the CLI to speed things up during development -->
+            <id>dependency-check</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <build>
+              <plugins>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>${dependency.check.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>io.confluent</groupId>
+                            <artifactId>build-tools</artifactId>
+                            <version>${io.confluent.common.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <suppressionFiles>
+                            <suppressionFile>${dependency.check.suppressions.location}</suppressionFile>
+                        </suppressionFiles>
+                        <cveUrlModified>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-1.1-modified.json.gz</cveUrlModified>
+                        <cveUrlBase>https://s3-us-west-2.amazonaws.com/confluent-packaging-tools/nvd.nist.gov/nvdcve-1.1-%d.json.gz</cveUrlBase>
+                        <!-- Don't use this except in special circumstances as a way to disable this check on the command
+                             line. Downstream projects should all be running this as part of their normal builds and should
+                             not override this flag in their pom file. -->
+                        <skip>${dependency.check.skip}</skip>
+                        <skipSystemScope>true</skipSystemScope>
+                        <skipProvidedScope>true</skipProvidedScope>
+                        <skipTestScope>true</skipTestScope>
+                        <format>xml</format>
+                        <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                        <ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+               </plugins>
+            </build>
         </profile>
         <profile>
             <id>java-9+</id>
@@ -853,7 +1154,7 @@
                                     <tarLongFileMode>posix</tarLongFileMode>
                                     <skipAssembly>${docker.skip-build}</skipAssembly>
                                     <descriptors>
-                                        <descriptor>target/dependency/assembly-plugin-boilerplate-${confluent.version}/common-docker-package.xml</descriptor>
+                                        <descriptor>target/dependency/assembly-plugin-boilerplate-${io.confluent.common.version}/common-docker-package.xml</descriptor>
                                     </descriptors>
                                     <archive>
                                         <manifest>
@@ -887,7 +1188,7 @@
                                         <argument>-h ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.artifactId}/licenses.html</argument>
                                         <argument>-l ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.artifactId}/licenses</argument>
                                         <argument>-n ${project.build.directory}/${project.build.finalName}-package/share/doc/${project.artifactId}/notices</argument>
-                                        <argument>-x licenses-${licenses.version}.jar</argument>
+                                        <argument>-x licenses-${io.confluent.license-file-generator.version}.jar</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -923,7 +1224,7 @@
                             <dependency>
                                 <groupId>io.confluent</groupId>
                                 <artifactId>licenses</artifactId>
-                                <version>${licenses.version}</version>
+                                <version>${io.confluent.license-file-generator.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
@@ -957,7 +1258,8 @@
                                     <skip>${docker.skip-build}</skip>
                                     <tag>${docker.tag}</tag>
                                     <repository>${docker.registry}confluentinc/${project.artifactId}</repository>
-                                    <pullNewerImage>false</pullNewerImage>
+                                    <pullNewerImage>${docker.pull-image}</pullNewerImage>
+                                    <dockerfile>${docker.file}</dockerfile>
                                 </configuration>
                             </execution>
                         </executions>
